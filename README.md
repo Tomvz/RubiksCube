@@ -17,19 +17,19 @@ Numpad3 -> Tourne autour de l'axe Z (-)
 
 Cube :
 
-Face avant / arrière :
+Faces sur Z :
 
 A/Z  
 Q/S  
 W/X  
 
-Face gauche / droite :  
+Faces sur X :  
 
 U/I  
 F/G  
 V/B  
 
-Face haut / bas :  
+Faces sur Y :  
 
 U/I  
 J/K  
