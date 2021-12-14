@@ -17,7 +17,7 @@ Numpad3 -> Tourne autour de l'axe Z (-)
 
 Cube :
 
-Faces sur Z :
+Faces sur Y :
 
 A/Z  
 Q/S  
@@ -29,7 +29,7 @@ U/I
 F/G  
 V/B  
 
-Faces sur Y :  
+Faces sur Z :  
 
 U/I  
 J/K  
