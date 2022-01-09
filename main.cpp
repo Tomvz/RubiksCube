@@ -14,7 +14,7 @@ sf::Window* initOpenglWindow()
 	sf::ContextSettings settings;
 	settings.depthBits = 24;
 
-	sf::Window* window = new sf::Window(sf::VideoMode(800, 800), "SFML", sf::Style::Close, settings);
+	sf::Window* window = new sf::Window(sf::VideoMode(800, 800), "Rubiks Cube", sf::Style::Close, settings);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
