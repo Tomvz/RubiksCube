@@ -862,9 +862,6 @@ void RubiksCube::draw()
 
 void RubiksCube::control(sf::Event ev)
 {
-
-	float speed(0.5);
-
 	if (ev.type == sf::Event::KeyPressed)
 	{
 		if (ev.key.code == sf::Keyboard::LShift)
