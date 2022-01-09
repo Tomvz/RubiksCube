@@ -1,441 +1,846 @@
 #include "RubiksCube.h"
 
-RubiksCube::RubiksCube()
+RubiksCube::RubiksCube(sf::Window *window)
 {
 	this->size = 5.f;
 	this->initCubes();
+	this->window = window;
 }
 
 void RubiksCube::shuffle()
 {
-
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distr_i(0, 5);
+	std::uniform_int_distribution<> distr_i(0, 8);
 	std::uniform_int_distribution<> distr_s(0, 1);
 
 
 	for (int i(0); i < 20; i++)
 	{
-		this->rotate(distr_i(gen), distr_s(gen));
+		this->rotate(distr_i(gen), distr_s(gen), 0.1);
 	}
 }
 
-void RubiksCube::rotate(int i, int s)
+void RubiksCube::rotate(int i, int s, float speed=0.5)
 {
 
-	float d(90 * PI / 180);
-	float g(270 * PI / 180);
+	float rad(PI / 180);
+	float d(rad);
+	float g(-rad);
 
 	if (i == 0)
 	{
 		if (s == 0)
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getY() == -this->size)
+					{
+						float x = c->getX();
+						float z = c->getZ();
+						c->setX(x * cos(g) + z * sin(g));
+						c->setZ(-x * sin(g) + z * cos(g));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float z = p->z;
+							p->x = (x * cos(g) + z * sin(g));
+							p->z = (-x * sin(g) + z * cos(g));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getY() == -this->size)
 				{
-					float x = c->getX();
-					float z = c->getZ();
-					c->setX(round(x * cos(g) + z * sin(g)));
-					c->setZ(round(-x * sin(g) + z * cos(g)));
-				
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float z = p->z;
-						p->x = (x * cos(g) + z * sin(g));
-						p->z = (-x * sin(g) + z * cos(g));
-					}
+					c->setX(round(c->getX()));
+					c->setZ(round(c->getZ()));
 				}
 			}
 		}
 		else
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getY() == -this->size)
+					{
+						float x = c->getX();
+						float z = c->getZ();
+						c->setX(x * cos(d) + z * sin(d));
+						c->setZ(-x * sin(d) + z * cos(d));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float z = p->z;
+							p->x = (x * cos(d) + z * sin(d));
+							p->z = (-x * sin(d) + z * cos(d));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getY() == -this->size)
 				{
-					float x = c->getX();
-					float z = c->getZ();
-					c->setX(round(x * cos(d) + z * sin(d)));
-					c->setZ(round(-x * sin(d) + z * cos(d)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float z = p->z;
-						p->x = (x * cos(d) + z * sin(d));
-						p->z = (-x * sin(d) + z * cos(d));
-					}
+					c->setX(round(c->getX()));
+					c->setZ(round(c->getZ()));
 				}
 			}
+
 		}
 	}
 
-	if (i == 1)
+	else if (i == 1)
 	{
 		if (s == 0)
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getY() == 0)
+					{
+						float x = c->getX();
+						float z = c->getZ();
+						c->setX(x * cos(g) + z * sin(g));
+						c->setZ(-x * sin(g) + z * cos(g));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float z = p->z;
+							p->x = (x * cos(g) + z * sin(g));
+							p->z = (-x * sin(g) + z * cos(g));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getY() == 0)
 				{
-					float x = c->getX();
-					float z = c->getZ();
-					c->setX(round(x * cos(g) + z * sin(g)));
-					c->setZ(round(-x * sin(g) + z * cos(g)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float z = p->z;
-						p->x = (x * cos(g) + z * sin(g));
-						p->z = (-x * sin(g) + z * cos(g));
-					}
+					c->setX(round(c->getX()));
+					c->setZ(round(c->getZ()));
 				}
 			}
 		}
+
 		else
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getY() == 0)
+					{
+						float x = c->getX();
+						float z = c->getZ();
+						c->setX(x * cos(d) + z * sin(d));
+						c->setZ(-x * sin(d) + z * cos(d));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float z = p->z;
+							p->x = (x * cos(d) + z * sin(d));
+							p->z = (-x * sin(d) + z * cos(d));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getY() == 0)
 				{
-					float x = c->getX();
-					float z = c->getZ();
-					c->setX(round(x * cos(d) + z * sin(d)));
-					c->setZ(round(-x * sin(d) + z * cos(d)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float z = p->z;
-						p->x = (x * cos(d) + z * sin(d));
-						p->z = (-x * sin(d) + z * cos(d));
-					}
+					c->setX(round(c->getX()));
+					c->setZ(round(c->getZ()));
 				}
 			}
 		}
 	}
 
-	if (i == 2)
+	else if (i == 2)
 	{
 		if (s == 0)
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getY() == this->size)
+					{
+						float x = c->getX();
+						float z = c->getZ();
+						c->setX(x * cos(g) + z * sin(g));
+						c->setZ(-x * sin(g) + z * cos(g));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float z = p->z;
+							p->x = (x * cos(g) + z * sin(g));
+							p->z = (-x * sin(g) + z * cos(g));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getY() == this->size)
 				{
-					float x = c->getX();
-					float z = c->getZ();
-					c->setX(round(x * cos(g) + z * sin(g)));
-					c->setZ(round(-x * sin(g) + z * cos(g)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float z = p->z;
-						p->x = (x * cos(g) + z * sin(g));
-						p->z = (-x * sin(g) + z * cos(g));
-					}
+					c->setX(round(c->getX()));
+					c->setZ(round(c->getZ()));
 				}
 			}
 		}
+
 		else
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getY() == this->size)
+					{
+						float x = c->getX();
+						float z = c->getZ();
+						c->setX(x * cos(d) + z * sin(d));
+						c->setZ(-x * sin(d) + z * cos(d));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float z = p->z;
+							p->x = (x * cos(d) + z * sin(d));
+							p->z = (-x * sin(d) + z * cos(d));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getY() == this->size)
 				{
-					float x = c->getX();
-					float z = c->getZ();
-					c->setX(round(x * cos(d) + z * sin(d)));
-					c->setZ(round(-x * sin(d) + z * cos(d)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float z = p->z;
-						p->x = (x * cos(d) + z * sin(d));
-						p->z = (-x * sin(d) + z * cos(d));
-					}
+					c->setX(round(c->getX()));
+					c->setZ(round(c->getZ()));
 				}
 			}
 		}
 	}
 	
-	if (i == 3)
+	else if (i == 3)
 	{
 		if (s == 0)
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getX() == -this->size)
+					{
+						float z = c->getZ();
+						float y = c->getY();
+						c->setZ(z * cos(g) + y * sin(g));
+						c->setY(-z * sin(g) + y * cos(g));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float z = p->z;
+							float y = p->y;
+							p->z = (z * cos(g) + y * sin(g));
+							p->y = (-z * sin(g) + y * cos(g));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getX() == -this->size)
 				{
-					float z = c->getZ();
-					float y = c->getY();
-					c->setZ(round(z * cos(g) + y * sin(g)));
-					c->setY(round(-z * sin(g) + y * cos(g)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float z = p->z;
-						float y = p->y;
-						p->z = (z * cos(g) + y * sin(g));
-						p->y = (-z * sin(g) + y * cos(g));
-					}
+					c->setZ(round(c->getZ()));
+					c->setY(round(c->getY()));
 				}
 			}
 		}
+
 		else
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getX() == -this->size)
+					{
+						float z = c->getZ();
+						float y = c->getY();
+						c->setZ(z * cos(d) + y * sin(d));
+						c->setY(-z * sin(d) + y * cos(d));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float z = p->z;
+							float y = p->y;
+							p->z = (z * cos(d) + y * sin(d));
+							p->y = (-z * sin(d) + y * cos(d));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getX() == -this->size)
 				{
-					float z = c->getZ();
-					float y = c->getY();
-					c->setZ(round(z * cos(d) + y * sin(d)));
-					c->setY(round(-z * sin(d) + y * cos(d)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float z = p->z;
-						float y = p->y;
-						p->z = (z * cos(d) + y * sin(d));
-						p->y = (-z * sin(d) + y * cos(d));
-					}
+					c->setZ(round(c->getZ()));
+					c->setY(round(c->getY()));
 				}
 			}
 		}
 	}
 	
-	if (i == 4)
+	else if (i == 4)
 	{
 		if (s == 0)
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getX() == 0)
+					{
+						float z = c->getZ();
+						float y = c->getY();
+						c->setZ(z * cos(g) + y * sin(g));
+						c->setY(-z * sin(g) + y * cos(g));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float z = p->z;
+							float y = p->y;
+							p->z = (z * cos(g) + y * sin(g));
+							p->y = (-z * sin(g) + y * cos(g));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getX() == 0)
 				{
-					float z = c->getZ();
-					float y = c->getY();
-					c->setZ(round(z * cos(g) + y * sin(g)));
-					c->setY(round(-z * sin(g) + y * cos(g)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float z = p->z;
-						float y = p->y;
-						p->z = (z * cos(g) + y * sin(g));
-						p->y = (-z * sin(g) + y * cos(g));
-					}
+					c->setZ(round(c->getZ()));
+					c->setY(round(c->getY()));
 				}
 			}
 		}
+
 		else
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getX() == 0)
+					{
+						float z = c->getZ();
+						float y = c->getY();
+						c->setZ(z * cos(d) + y * sin(d));
+						c->setY(-z * sin(d) + y * cos(d));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float z = p->z;
+							float y = p->y;
+							p->z = (z * cos(d) + y * sin(d));
+							p->y = (-z * sin(d) + y * cos(d));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getX() == 0)
 				{
-					float z = c->getZ();
-					float y = c->getY();
-					c->setZ(round(z * cos(d) + y * sin(d)));
-					c->setY(round(-z * sin(d) + y * cos(d)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float z = p->z;
-						float y = p->y;
-						p->z = (z * cos(d) + y * sin(d));
-						p->y = (-z * sin(d) + y * cos(d));
-					}
+					c->setZ(round(c->getZ()));
+					c->setY(round(c->getY()));
 				}
 			}
 		}
 	}
 	
-	if (i == 5)
+	else if (i == 5)
 	{
 		if (s == 0)
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getX() == this->size)
+					{
+						float z = c->getZ();
+						float y = c->getY();
+						c->setZ(z * cos(g) + y * sin(g));
+						c->setY(-z * sin(g) + y * cos(g));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float z = p->z;
+							float y = p->y;
+							p->z = (z * cos(g) + y * sin(g));
+							p->y = (-z * sin(g) + y * cos(g));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getX() == this->size)
 				{
-					float z = c->getZ();
-					float y = c->getY();
-					c->setZ(round(z * cos(g) + y * sin(g)));
-					c->setY(round(-z * sin(g) + y * cos(g)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float z = p->z;
-						float y = p->y;
-						p->z = (z * cos(g) + y * sin(g));
-						p->y = (-z * sin(g) + y * cos(g));
-					}
+					c->setZ(round(c->getZ()));
+					c->setY(round(c->getY()));
 				}
 			}
 		}
+
 		else
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getX() == this->size)
+					{
+						float z = c->getZ();
+						float y = c->getY();
+						c->setZ(z * cos(d) + y * sin(d));
+						c->setY(-z * sin(d) + y * cos(d));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float z = p->z;
+							float y = p->y;
+							p->z = (z * cos(d) + y * sin(d));
+							p->y = (-z * sin(d) + y * cos(d));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getX() == this->size)
 				{
-					float z = c->getZ();
-					float y = c->getY();
-					c->setZ(round(z * cos(d) + y * sin(d)));
-					c->setY(round(-z * sin(d) + y * cos(d)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float z = p->z;
-						float y = p->y;
-						p->z = (z * cos(d) + y * sin(d));
-						p->y = (-z * sin(d) + y * cos(d));
-					}
+					c->setZ(round(c->getZ()));
+					c->setY(round(c->getY()));
 				}
 			}
 		}
 	}
 
-	if (i == 6)
+	else if (i == 6)
 	{
 		if (s == 0)
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getZ() == -this->size)
+					{
+						float x = c->getX();
+						float y = c->getY();
+						c->setX(x * cos(g) + y * sin(g));
+						c->setY(-x * sin(g) + y * cos(g));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float y = p->y;
+							p->x = (x * cos(g) + y * sin(g));
+							p->y = (-x * sin(g) + y * cos(g));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getZ() == -this->size)
 				{
-					float x = c->getX();
-					float y = c->getY();
-					c->setX(round(x * cos(g) + y * sin(g)));
-					c->setY(round(-x * sin(g) + y * cos(g)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float y = p->y;
-						p->x = (x * cos(g) + y * sin(g));
-						p->y = (-x * sin(g) + y * cos(g));
-					}
+					c->setX(round(c->getX()));
+					c->setY(round(c->getY()));
 				}
 			}
 		}
+
 		else
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getZ() == -this->size)
+					{
+						float x = c->getX();
+						float y = c->getY();
+						c->setX(x * cos(d) + y * sin(d));
+						c->setY(-x * sin(d) + y * cos(d));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float y = p->y;
+							p->x = (x * cos(d) + y * sin(d));
+							p->y = (-x * sin(d) + y * cos(d));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getZ() == -this->size)
 				{
-					float x = c->getX();
-					float y = c->getY();
-					c->setX(round(x * cos(d) + y * sin(d)));
-					c->setY(round(-x * sin(d) + y * cos(d)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float y = p->y;
-						p->x = (x * cos(d) + y * sin(d));
-						p->y = (-x * sin(d) + y * cos(d));
-					}
+					c->setX(round(c->getX()));
+					c->setY(round(c->getY()));
 				}
 			}
 		}
 	}
 
-	if (i == 7)
+	else if (i == 7)
 	{
 		if (s == 0)
 		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getZ() == 0)
+					{
+						float x = c->getX();
+						float y = c->getY();
+						c->setX(x * cos(g) + y * sin(g));
+						c->setY(-x * sin(g) + y * cos(g));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float y = p->y;
+							p->x = (x * cos(g) + y * sin(g));
+							p->y = (-x * sin(g) + y * cos(g));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getZ() == 0)
 				{
-					float x = c->getX();
-					float y = c->getY();
-					c->setX(round(x * cos(g) + y * sin(g)));
-					c->setY(round(-x * sin(g) + y * cos(g)));
+					c->setX(round(c->getX()));
+					c->setY(round(c->getY()));
+				}
+			}
+		}
 
-					for (sf::Vector3f* p : c->getPoints())
+		else
+		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getZ() == 0)
 					{
-						float x = p->x;
-						float y = p->y;
-						p->x = (x * cos(g) + y * sin(g));
-						p->y = (-x * sin(g) + y * cos(g));
+						float x = c->getX();
+						float y = c->getY();
+						c->setX(x * cos(d) + y * sin(d));
+						c->setY(-x * sin(d) + y * cos(d));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float y = p->y;
+							p->x = (x * cos(d) + y * sin(d));
+							p->y = (-x * sin(d) + y * cos(d));
+						}
 					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
+			for (Cube* c : this->cube_list)
+			{
+				if (c->getZ() == 0)
+				{
+					c->setX(round(c->getX()));
+					c->setY(round(c->getY()));
+				}
+			}
+			}
+		}
+
+	else if (i == 8)
+	{
+		if (s == 0)
+		{
+			for (int i(0); i < 90; i++)
+			{
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getZ() == this->size)
+					{
+						float x = c->getX();
+						float y = c->getY();
+						c->setX(x * cos(g) + y * sin(g));
+						c->setY(-x * sin(g) + y * cos(g));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float y = p->y;
+							p->x = (x * cos(g) + y * sin(g));
+							p->y = (-x * sin(g) + y * cos(g));
+						}
+					}
+				}
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
+			for (Cube* c : this->cube_list)
+			{
+				if (c->getZ() == this->size)
+				{
+					c->setX(round(c->getX()));
+					c->setY(round(c->getY()));
 				}
 			}
 		}
 		else
 		{
-			for (Cube* c : this->cube_list)
+			for (int i(0); i < 90; i++)
 			{
-				if (c->getZ() == 0)
-				{
-					float x = c->getX();
-					float y = c->getY();
-					c->setX(round(x * cos(d) + y * sin(d)));
-					c->setY(round(-x * sin(d) + y * cos(d)));
 
-					for (sf::Vector3f* p : c->getPoints())
+				std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+				for (Cube* c : this->cube_list)
+				{
+					if (c->getZ() == this->size)
 					{
-						float x = p->x;
-						float y = p->y;
-						p->x = (x * cos(d) + y * sin(d));
-						p->y = (-x * sin(d) + y * cos(d));
+						float x = c->getX();
+						float y = c->getY();
+						c->setX(x * cos(d) + y * sin(d));
+						c->setY(-x * sin(d) + y * cos(d));
+
+						for (sf::Vector3f* p : c->getPoints())
+						{
+							float x = p->x;
+							float y = p->y;
+							p->x = (x * cos(d) + y * sin(d));
+							p->y = (-x * sin(d) + y * cos(d));
+						}
 					}
 				}
-			}
-		}
-	}
 
-	if (i == 8)
-	{
-		if (s == 0)
-		{
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				this->draw();
+
+				this->window->display();
+
+			}
+
 			for (Cube* c : this->cube_list)
 			{
 				if (c->getZ() == this->size)
 				{
-					float x = c->getX();
-					float y = c->getY();
-					c->setX(round(x * cos(g) + y * sin(g)));
-					c->setY(round(-x * sin(g) + y * cos(g)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float y = p->y;
-						p->x = (x * cos(g) + y * sin(g));
-						p->y = (-x * sin(g) + y * cos(g));
-					}
-				}
-			}
-		}
-		else
-		{
-			for (Cube* c : this->cube_list)
-			{
-				if (c->getZ() == this->size)
-				{
-					float x = c->getX();
-					float y = c->getY();
-					c->setX(round(x * cos(d) + y * sin(d)));
-					c->setY(round(-x * sin(d) + y * cos(d)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float y = p->y;
-						p->x = (x * cos(d) + y * sin(d));
-						p->y = (-x * sin(d) + y * cos(d));
-					}
+					c->setX(round(c->getX()));
+					c->setY(round(c->getY()));
 				}
 			}
 		}
@@ -457,8 +862,15 @@ void RubiksCube::draw()
 
 void RubiksCube::control(sf::Event ev)
 {
+
+	float speed(0.5);
+
 	if (ev.type == sf::Event::KeyPressed)
 	{
+		if (ev.key.code == sf::Keyboard::LShift)
+		{
+			this->shuffle();
+		}
 		if (ev.key.code == sf::Keyboard::W)
 		{
 			this->rotate(0, 0);

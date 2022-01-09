@@ -9,9 +9,12 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include <vector>
+#include <tuple>
 #include <math.h>
 #include <iostream>
 #include <random>
+#include <chrono>
+#include <thread>
 # define PI          3.141592653589793238462643383279502884
 
 class RubiksCube
@@ -19,9 +22,9 @@ class RubiksCube
 
 public:
 
-	RubiksCube();
+	RubiksCube(sf::Window *window);
 	void shuffle();
-	void rotate(int i, int s);
+	void rotate(int i, int s, float speed);
 	std::vector<Cube*> getCubes();
 	void draw();
 	void control(sf::Event ev);
@@ -40,6 +43,7 @@ public:
 
 private:
 
+	sf::Window *window;
 	void initCubes();
 	std::vector<Cube *> cube_list;
 

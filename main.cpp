@@ -19,7 +19,7 @@ sf::Window* initOpenglWindow()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glClearDepth(1.f);
-	glClearColor(0.f, 0.f, 0.f, 0.f);
+	glClearColor(0.5, 0.5, 0.5, 0.f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45.f, window->getSize().x / window->getSize().y, 1.f, 500.f);
@@ -66,8 +66,7 @@ int main()
 	float cameraSpeed(0.01);
 	sf::Event e;
 
-	RubiksCube* rc = new RubiksCube();
-	rc->shuffle();
+	RubiksCube* rc = new RubiksCube(window);
 
 	while (window->isOpen())
 	{
