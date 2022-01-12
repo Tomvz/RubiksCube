@@ -2,6 +2,9 @@
 Projet NSI RubiksCube  
 Nécessite C++ et SFML 2.5.1  
 
+28/12/2021 : Base du projet + création de la classe Cube  
+29/12/2021 : Création de la classe RubiksCube et implementation de ses fonctions  
+
 Contrôles :  
 
 Caméra :  
