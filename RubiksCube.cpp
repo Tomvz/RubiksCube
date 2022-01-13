@@ -1,31 +1,49 @@
 #include "RubiksCube.h"
 
-RubiksCube::RubiksCube()
+//Variables utiles à la génération de nombres aléatoires (utilisés dans la méthode shuffle())
+std::random_device rd;
+std::mt19937 gen(rd());
+std::uniform_int_distribution<> distr_i(0, 8);
+std::uniform_int_distribution<> distr_s(0, 1);
+
+RubiksCube::RubiksCube() //Implémentation des attributs de la classe Rubiks Cube.
 {
 	this->size = 5.f;
 	this->initCubes();
+
+	this->rotation_speed = 0.5;
+	this->last_rotation_timing = sf::Time(sf::seconds(0));
+	this->rotating = false;
+	this->rotation_count = 0;
+
+	this->shuffling_count = 0;
+	this->shuffling = false;
 }
 
-void RubiksCube::shuffle()
+void RubiksCube::shuffle() //Mélange du Rubiks Cube.
 {
+		int si = distr_i(gen);
+		int ss = distr_s(gen);
 
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distr_i(0, 5);
-	std::uniform_int_distribution<> distr_s(0, 1);
+		this->rotating = true;
+		this->current_rotation = { si, ss };
+		this->rotate(si, ss);
 
+		this->shuffling_count++;
 
-	for (int i(0); i < 20; i++)
-	{
-		this->rotate(distr_i(gen), distr_s(gen));
-	}
+		if (this->shuffling_count == 20)
+		{
+			this->shuffling = false;
+			this->shuffling_count = 0;
+			this->rotation_speed = 0.5;
+		}
 }
 
-void RubiksCube::rotate(int i, int s)
+void RubiksCube::rotate(const __int8 i, const __int8 s) //Gère les rotations du Rubiks Cube.
 {
 
-	float d(90 * PI / 180);
-	float g(270 * PI / 180);
+	float d(PI / 180);
+	float g(-PI / 180);
 
 	if (i == 0)
 	{
@@ -37,9 +55,9 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float x = c->getX();
 					float z = c->getZ();
-					c->setX(round(x * cos(g) + z * sin(g)));
-					c->setZ(round(-x * sin(g) + z * cos(g)));
-				
+					c->setX(x * cos(g) + z * sin(g));
+					c->setZ(-x * sin(g) + z * cos(g));
+
 					for (sf::Vector3f* p : c->getPoints())
 					{
 						float x = p->x;
@@ -58,8 +76,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float x = c->getX();
 					float z = c->getZ();
-					c->setX(round(x * cos(d) + z * sin(d)));
-					c->setZ(round(-x * sin(d) + z * cos(d)));
+					c->setX(x * cos(d) + z * sin(d));
+					c->setZ(-x * sin(d) + z * cos(d));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -73,7 +91,7 @@ void RubiksCube::rotate(int i, int s)
 		}
 	}
 
-	if (i == 1)
+	else if (i == 1)
 	{
 		if (s == 0)
 		{
@@ -83,8 +101,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float x = c->getX();
 					float z = c->getZ();
-					c->setX(round(x * cos(g) + z * sin(g)));
-					c->setZ(round(-x * sin(g) + z * cos(g)));
+					c->setX(x * cos(g) + z * sin(g));
+					c->setZ(-x * sin(g) + z * cos(g));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -96,6 +114,7 @@ void RubiksCube::rotate(int i, int s)
 				}
 			}
 		}
+
 		else
 		{
 			for (Cube* c : this->cube_list)
@@ -104,8 +123,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float x = c->getX();
 					float z = c->getZ();
-					c->setX(round(x * cos(d) + z * sin(d)));
-					c->setZ(round(-x * sin(d) + z * cos(d)));
+					c->setX(x * cos(d) + z * sin(d));
+					c->setZ(-x * sin(d) + z * cos(d));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -119,7 +138,7 @@ void RubiksCube::rotate(int i, int s)
 		}
 	}
 
-	if (i == 2)
+	else if (i == 2)
 	{
 		if (s == 0)
 		{
@@ -129,8 +148,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float x = c->getX();
 					float z = c->getZ();
-					c->setX(round(x * cos(g) + z * sin(g)));
-					c->setZ(round(-x * sin(g) + z * cos(g)));
+					c->setX(x * cos(g) + z * sin(g));
+					c->setZ(-x * sin(g) + z * cos(g));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -142,6 +161,7 @@ void RubiksCube::rotate(int i, int s)
 				}
 			}
 		}
+
 		else
 		{
 			for (Cube* c : this->cube_list)
@@ -150,8 +170,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float x = c->getX();
 					float z = c->getZ();
-					c->setX(round(x * cos(d) + z * sin(d)));
-					c->setZ(round(-x * sin(d) + z * cos(d)));
+					c->setX(x * cos(d) + z * sin(d));
+					c->setZ(-x * sin(d) + z * cos(d));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -164,8 +184,8 @@ void RubiksCube::rotate(int i, int s)
 			}
 		}
 	}
-	
-	if (i == 3)
+
+	else if (i == 3)
 	{
 		if (s == 0)
 		{
@@ -175,8 +195,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float z = c->getZ();
 					float y = c->getY();
-					c->setZ(round(z * cos(g) + y * sin(g)));
-					c->setY(round(-z * sin(g) + y * cos(g)));
+					c->setZ(z * cos(g) + y * sin(g));
+					c->setY(-z * sin(g) + y * cos(g));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -188,6 +208,7 @@ void RubiksCube::rotate(int i, int s)
 				}
 			}
 		}
+
 		else
 		{
 			for (Cube* c : this->cube_list)
@@ -196,8 +217,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float z = c->getZ();
 					float y = c->getY();
-					c->setZ(round(z * cos(d) + y * sin(d)));
-					c->setY(round(-z * sin(d) + y * cos(d)));
+					c->setZ(z * cos(d) + y * sin(d));
+					c->setY(-z * sin(d) + y * cos(d));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -210,8 +231,8 @@ void RubiksCube::rotate(int i, int s)
 			}
 		}
 	}
-	
-	if (i == 4)
+
+	else if (i == 4)
 	{
 		if (s == 0)
 		{
@@ -221,8 +242,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float z = c->getZ();
 					float y = c->getY();
-					c->setZ(round(z * cos(g) + y * sin(g)));
-					c->setY(round(-z * sin(g) + y * cos(g)));
+					c->setZ(z * cos(g) + y * sin(g));
+					c->setY(-z * sin(g) + y * cos(g));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -234,6 +255,7 @@ void RubiksCube::rotate(int i, int s)
 				}
 			}
 		}
+
 		else
 		{
 			for (Cube* c : this->cube_list)
@@ -242,8 +264,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float z = c->getZ();
 					float y = c->getY();
-					c->setZ(round(z * cos(d) + y * sin(d)));
-					c->setY(round(-z * sin(d) + y * cos(d)));
+					c->setZ(z * cos(d) + y * sin(d));
+					c->setY(-z * sin(d) + y * cos(d));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -256,8 +278,8 @@ void RubiksCube::rotate(int i, int s)
 			}
 		}
 	}
-	
-	if (i == 5)
+
+	else if (i == 5)
 	{
 		if (s == 0)
 		{
@@ -267,8 +289,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float z = c->getZ();
 					float y = c->getY();
-					c->setZ(round(z * cos(g) + y * sin(g)));
-					c->setY(round(-z * sin(g) + y * cos(g)));
+					c->setZ(z * cos(g) + y * sin(g));
+					c->setY(-z * sin(g) + y * cos(g));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -280,6 +302,7 @@ void RubiksCube::rotate(int i, int s)
 				}
 			}
 		}
+
 		else
 		{
 			for (Cube* c : this->cube_list)
@@ -288,8 +311,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float z = c->getZ();
 					float y = c->getY();
-					c->setZ(round(z * cos(d) + y * sin(d)));
-					c->setY(round(-z * sin(d) + y * cos(d)));
+					c->setZ(z * cos(d) + y * sin(d));
+					c->setY(-z * sin(d) + y * cos(d));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -303,7 +326,7 @@ void RubiksCube::rotate(int i, int s)
 		}
 	}
 
-	if (i == 6)
+	else if (i == 6)
 	{
 		if (s == 0)
 		{
@@ -313,8 +336,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float x = c->getX();
 					float y = c->getY();
-					c->setX(round(x * cos(g) + y * sin(g)));
-					c->setY(round(-x * sin(g) + y * cos(g)));
+					c->setX(x * cos(g) + y * sin(g));
+					c->setY(-x * sin(g) + y * cos(g));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -326,6 +349,7 @@ void RubiksCube::rotate(int i, int s)
 				}
 			}
 		}
+
 		else
 		{
 			for (Cube* c : this->cube_list)
@@ -334,8 +358,8 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float x = c->getX();
 					float y = c->getY();
-					c->setX(round(x * cos(d) + y * sin(d)));
-					c->setY(round(-x * sin(d) + y * cos(d)));
+					c->setX(x * cos(d) + y * sin(d));
+					c->setY(-x * sin(d) + y * cos(d));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -349,7 +373,7 @@ void RubiksCube::rotate(int i, int s)
 		}
 	}
 
-	if (i == 7)
+	else if (i == 7)
 	{
 		if (s == 0)
 		{
@@ -359,8 +383,55 @@ void RubiksCube::rotate(int i, int s)
 				{
 					float x = c->getX();
 					float y = c->getY();
-					c->setX(round(x * cos(g) + y * sin(g)));
-					c->setY(round(-x * sin(g) + y * cos(g)));
+					c->setX(x * cos(g) + y * sin(g));
+					c->setY(-x * sin(g) + y * cos(g));
+
+					for (sf::Vector3f* p : c->getPoints())
+					{
+						float x = p->x;
+						float y = p->y;
+						p->x = (x * cos(g) + y * sin(g));
+						p->y = (-x * sin(g) + y * cos(g));
+					}
+				}
+			}
+		}
+
+		else
+		{
+			for (Cube* c : this->cube_list)
+			{
+				if (c->getZ() == 0)
+				{
+					float x = c->getX();
+					float y = c->getY();
+					c->setX(x * cos(d) + y * sin(d));
+					c->setY(-x * sin(d) + y * cos(d));
+
+					for (sf::Vector3f* p : c->getPoints())
+					{
+						float x = p->x;
+						float y = p->y;
+						p->x = (x * cos(d) + y * sin(d));
+						p->y = (-x * sin(d) + y * cos(d));
+					}
+				}
+			}
+		}
+	}
+
+	else if (i == 8)
+	{
+		if (s == 0)
+		{
+			for (Cube* c : this->cube_list)
+			{
+				if (c->getZ() == this->size)
+				{
+					float x = c->getX();
+					float y = c->getY();
+					c->setX(x * cos(g) + y * sin(g));
+					c->setY(-x * sin(g) + y * cos(g));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -376,12 +447,12 @@ void RubiksCube::rotate(int i, int s)
 		{
 			for (Cube* c : this->cube_list)
 			{
-				if (c->getZ() == 0)
+				if (c->getZ() == this->size)
 				{
 					float x = c->getX();
 					float y = c->getY();
-					c->setX(round(x * cos(d) + y * sin(d)));
-					c->setY(round(-x * sin(d) + y * cos(d)));
+					c->setX(x * cos(d) + y * sin(d));
+					c->setY(-x * sin(d) + y * cos(d));
 
 					for (sf::Vector3f* p : c->getPoints())
 					{
@@ -395,146 +466,168 @@ void RubiksCube::rotate(int i, int s)
 		}
 	}
 
-	if (i == 8)
+	this->rotation_count++;
+
+	if (this->rotation_count == 90)
 	{
-		if (s == 0)
-		{
-			for (Cube* c : this->cube_list)
-			{
-				if (c->getZ() == this->size)
-				{
-					float x = c->getX();
-					float y = c->getY();
-					c->setX(round(x * cos(g) + y * sin(g)));
-					c->setY(round(-x * sin(g) + y * cos(g)));
+		this->rotation_count = 0;
+		this->rotating = false;
 
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float y = p->y;
-						p->x = (x * cos(g) + y * sin(g));
-						p->y = (-x * sin(g) + y * cos(g));
-					}
-				}
-			}
-		}
-		else
+		for (Cube* c : this->cube_list)
 		{
-			for (Cube* c : this->cube_list)
-			{
-				if (c->getZ() == this->size)
-				{
-					float x = c->getX();
-					float y = c->getY();
-					c->setX(round(x * cos(d) + y * sin(d)));
-					c->setY(round(-x * sin(d) + y * cos(d)));
-
-					for (sf::Vector3f* p : c->getPoints())
-					{
-						float x = p->x;
-						float y = p->y;
-						p->x = (x * cos(d) + y * sin(d));
-						p->y = (-x * sin(d) + y * cos(d));
-					}
-				}
-			}
+			c->setX(round(c->getX()));
+			c->setY(round(c->getY()));
+			c->setZ(round(c->getZ()));
 		}
 	}
+
 }
 
-std::vector<Cube*> RubiksCube::getCubes()
+void RubiksCube::draw() //Dessin de chaque cubes composants le Rubiks Cube.
 {
-	return this->cube_list;
-}
-
-void RubiksCube::draw()
-{
-	for (Cube *c : this->cube_list)
+	for (Cube* c : this->cube_list)
 	{
 		c->draw();
 	}
 }
 
-void RubiksCube::control(sf::Event ev)
+void RubiksCube::control() //Gère les inputs du joueur et les itérations de rotation.
 {
-	if (ev.type == sf::Event::KeyPressed)
+
+	if (this->shuffling && this->rotating == false)
 	{
-		if (ev.key.code == sf::Keyboard::W)
+		this->shuffle();
+	}
+
+	else if (this->rotating == false)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		{
+			this->shuffling = true;
+			this->rotation_speed = 0.1;
+			this->shuffle();
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
 			this->rotate(0, 0);
+			this->rotating = true;
+			this->current_rotation = { 0, 0 };
 		}
-		else if (ev.key.code == sf::Keyboard::X)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 		{
 			this->rotate(0, 1);
+			this->rotating = true;
+			this->current_rotation = { 0, 1 };
 		}
-		else if (ev.key.code == sf::Keyboard::Q)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		{
 			this->rotate(1, 0);
+			this->rotating = true;
+			this->current_rotation = { 1, 0 };
 		}
-		else if (ev.key.code == sf::Keyboard::S)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
 			this->rotate(1, 1);
+			this->rotating = true;
+			this->current_rotation = { 1, 1 };
 		}
-		else if (ev.key.code == sf::Keyboard::A)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			this->rotate(2, 0);
+			this->rotating = true;
+			this->current_rotation = { 2, 0 };
 		}
-		else if (ev.key.code == sf::Keyboard::Z)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 		{
 			this->rotate(2, 1);
+			this->rotating = true;
+			this->current_rotation = { 2, 1 };
 		}
-		else if (ev.key.code == sf::Keyboard::V)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
 		{
 			this->rotate(3, 0);
+			this->rotating = true;
+			this->current_rotation = { 3, 0 };
 		}
-		else if (ev.key.code == sf::Keyboard::B)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
 		{
 			this->rotate(3, 1);
+			this->rotating = true;
+			this->current_rotation = { 3, 1 };
 		}
-		else if (ev.key.code == sf::Keyboard::F)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
 		{
 			this->rotate(4, 0);
+			this->rotating = true;
+			this->current_rotation = { 4, 0 };
 		}
-		else if (ev.key.code == sf::Keyboard::G)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::G))
 		{
 			this->rotate(4, 1);
+			this->rotating = true;
+			this->current_rotation = { 4, 1 };
 		}
-		else if (ev.key.code == sf::Keyboard::R)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 		{
 			this->rotate(5, 0);
+			this->rotating = true;
+			this->current_rotation = { 5, 0 };
 		}
-		else if (ev.key.code == sf::Keyboard::T)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::T))
 		{
 			this->rotate(5, 1);
+			this->rotating = true;
+			this->current_rotation = { 5, 1 };
 		}
-		else if (ev.key.code == sf::Keyboard::U)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
 		{
 			this->rotate(6, 0);
+			this->rotating = true;
+			this->current_rotation = { 6, 0 };
 		}
-		else if (ev.key.code == sf::Keyboard::I)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 		{
 			this->rotate(6, 1);
+			this->rotating = true;
+			this->current_rotation = { 6, 1 };
 		}
-		else if (ev.key.code == sf::Keyboard::J)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
 		{
 			this->rotate(7, 0);
+			this->rotating = true;
+			this->current_rotation = { 7, 0 };
 		}
-		else if (ev.key.code == sf::Keyboard::K)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
 		{
 			this->rotate(7, 1);
+			this->rotating = true;
+			this->current_rotation = { 7, 1 };
 		}
-		else if (ev.key.code == sf::Keyboard::Comma)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Comma))
 		{
 			this->rotate(8, 0);
+			this->rotating = true;
+			this->current_rotation = { 8, 0 };
 		}
-		else if (ev.key.code == sf::Keyboard::Period)
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Period))
 		{
 			this->rotate(8, 1);
+			this->rotating = true;
+			this->current_rotation = { 8, 1 };
+		}
+	}
+
+	else
+	{
+		if (this->clock.getElapsedTime() >= this->last_rotation_timing + sf::Time(sf::seconds(this->rotation_speed / 90)))
+		{
+			this->last_rotation_timing = this->clock.getElapsedTime();
+			this->rotate(this->current_rotation[0], this->current_rotation[1]);
 		}
 	}
 }
 
-RubiksCube::~RubiksCube()
+RubiksCube::~RubiksCube() //Destruction des cubes composants le Rubiks Cube.
 {
 	for (Cube* c : this->cube_list)
 	{
@@ -543,7 +636,7 @@ RubiksCube::~RubiksCube()
 	}
 }
 
-void RubiksCube::initCubes()
+void RubiksCube::initCubes() //Création des cubes composants le Rubiks Cube.
 {
 
 	float colors1[6][3] = {

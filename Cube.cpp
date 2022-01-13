@@ -1,6 +1,6 @@
 #include "Cube.h"
 
-Cube::Cube(float x, float y, float z, float size, float colors[6][3])
+Cube::Cube(const float x, const float y, const float z, const float size, const float colors[6][3]) //Implémentation des attributs de la classe Cube.
 {
 	this->x = x;
 	this->y = y;
@@ -41,6 +41,9 @@ Cube::Cube(float x, float y, float z, float size, float colors[6][3])
 	this->vectors.push_back(new sf::Vector3f(x - size / 2, y - size/2, z - size/2));
 }
 
+
+//Getters / Setters : Permet de récupérer les coordonnées du cube ou de les modifier.
+
 std::vector<sf::Vector3f *> Cube::getPoints()
 {
 	return this->vectors;
@@ -60,22 +63,22 @@ float Cube::getZ()
 {
 	return this->z;
 }
-void Cube::setX(float x)
+void Cube::setX(const float x)
 {
 	this->x = x;
 }
 
-void Cube::setY(float y)
+void Cube::setY(const float y)
 {
 	this->y = y;
 }
 
-void Cube::setZ(float z)
+void Cube::setZ(const float z)
 {
 	this->z = z;
 }
 
-void Cube::draw()
+void Cube::draw() //Dessine le cube.
 {
 
 	float hs = this->size / 2;
@@ -121,7 +124,7 @@ void Cube::draw()
 	glEnd();
 }
 
-Cube::~Cube()
+Cube::~Cube() //Destruction des Vector3f (points) composants le Cube.
 {
 	for (sf::Vector3f* v : this->vectors)
 	{

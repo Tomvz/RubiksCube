@@ -1,16 +1,7 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
-#include <SFML/OpenGL.hpp>
 #include "Cube.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
 #include <vector>
 #include <math.h>
-#include <iostream>
 #include <random>
 # define PI          3.141592653589793238462643383279502884
 
@@ -19,17 +10,17 @@ class RubiksCube
 
 public:
 
+	//Constructeur
 	RubiksCube();
-	void shuffle();
-	void rotate(int i, int s);
-	std::vector<Cube*> getCubes();
+
+	//Déclaration des méthodes publics nécéssaires au fonctionnement du Rubiks Cube.
 	void draw();
-	void control(sf::Event ev);
+	void control();
+
+	//Destructeur (Détruit proprement les cubes du Rubiks Cube)
 	~RubiksCube();
 
-	float size;
-
-	//COLORS IN FLOAT :
+	//COULEURS EN FLOAT (Utiles pour colorier les faces des cubes):
 	float BLACK[3] = { 0.f, 0.f, 0.f };
 	float WHITE[3] = { 1.f, 1.f, 1.f };
 	float GREEN[3] = { 0.3451, 0.8353, 0.4078 };
@@ -40,8 +31,28 @@ public:
 
 private:
 
+	//Initialisation des cubes et de leur taille et les met dans une liste.
+	float size;
 	void initCubes();
-	std::vector<Cube *> cube_list;
+	std::vector<Cube*> cube_list;
+
+	//Initialisation d'une horloge propre au Rubiks Cube pour gérer les temps de rotations.
+	sf::Clock clock;
+
+	//Déclaration des methodes de rotation.
+	void shuffle();
+	void rotate(const __int8 i, const __int8 s);
+
+	//Création des attributs nécéssaires au fonctionnement des rotations du Rubiks Cube.
+	int rotation_count;
+	float rotation_speed;
+	bool rotating;
+	sf::Time last_rotation_timing;
+	std::vector<int> current_rotation;
+
+	//Création des attributs nécéssaires au fonctionnement du mélange du Rubiks Cube.
+	int shuffling_count;
+	bool shuffling;
 
 };
 

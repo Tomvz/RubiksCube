@@ -1,9 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
 #include <SFML/OpenGL.hpp>
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -12,19 +8,27 @@ class Cube
 
 public:
 
-	Cube(float x, float y, float z, float size, float colors[6][3]);
+	//Constructeur
+	Cube(const float x, const float y, const float z, const float size, const float colors[6][3]);
+
+	//Getters / Setters
 	float getX();
 	float getY();
 	float getZ();
-	void setX(float x);
-	void setY(float y);
-	void setZ(float z);
+	void setX(const float x);
+	void setY(const float y);
+	void setZ(const float z);
 	std::vector<sf::Vector3f*> getPoints();
+
+	//Dessin du cube.
 	void draw();
+	
+	//Destructeur
 	~Cube();
 
 private:
 
+	//Déclaration des attributs.
 	float x;
 	float y;
 	float z;
