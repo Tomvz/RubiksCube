@@ -4,6 +4,12 @@ C++ & SFML 2.5.1
 
 28/12/2021 : Base du projet + création de la classe Cube  
 29/12/2021 : Création de la classe RubiksCube et implementation de ses fonctions  
+07/01/2022 : Ajout des commentaires et dernières modifications  
+  
+Ajouts possibles :  
+-Résolution automatique
+
+
 
 Contrôles :  
 
